@@ -1,5 +1,34 @@
 # Hardware-project
 
+## 📁 Multi-Cycle MIPS Processor - Project Structure
+
+This project implements a 32-bit MIPS processor using VHDL, following a multi-cycle architecture. The tasks are divided among four team members:
+
+---
+
+### 👤 Person 1 – Memory & Register File
+Handles memory units and basic register components.
+
+
+---
+
+### 👤 Person 2 – ALU, Shifter, Sign Extension, MUX
+Implements the arithmetic and logic units, shifters, and multiplexers.
+
+
+---
+
+### 👤 Person 3 – Control Unit
+Implements instruction decoding and control signal generation.
+
+
+---
+
+### 👤 Person 4 – Integration & Connection Logic
+Integrates all components and handles testing and simulation.
+
+
+---
 MultiCycleMIPS/
 │
 ├── src/                    # VHDL source files
