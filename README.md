@@ -28,7 +28,6 @@ Implements instruction decoding and control signal generation.
 Integrates all components and handles testing and simulation.
 
 
----
 MultiCycleMIPS/
 │
 ├── src/                    # VHDL source files
@@ -42,10 +41,10 @@ MultiCycleMIPS/
 │   │   ├── A_register.vhd                ← Person 1
 │   │   ├── B_register.vhd                ← Person 1
 │   │   ├── alu_out_register.vhd          ← Person 1
-│   │   ├── pc.vhd                         ← Person 1
+│   │   ├── pc.vhd                        ← Person 1
 │   │
 │   ├── alu/
-│   │   ├── alu.vhd                        ← Person 2
+│   │   ├── alu.vhd                       ← Person 2
 │   │   ├── shift_left2.vhd               ← Person 2
 │   │   ├── sign_extender.vhd             ← Person 2
 │   │   ├── mux2to1.vhd                   ← Person 2
@@ -64,16 +63,16 @@ MultiCycleMIPS/
 ├── tb/                     # Testbenches
 │   ├── tb_instruction_memory.vhd         ← Person 1
 │   ├── tb_alu.vhd                        ← Person 2
-│   ├── tb_control_unit.vhd              ← Person 3
-│   ├── tb_top_level.vhd                 ← Person 4
+│   ├── tb_control_unit.vhd               ← Person 3
+│   ├── tb_top_level.vhd                  ← Person 4
 │
-├── sim/                    # Simulation scripts or waveforms
-│   ├── waveform.do                     ← Person 4 (optional)
-│   ├── run_simulation.tcl             ← Person 4
+├── sim/                    # Simulation scripts
+│   ├── waveform.do                      ← Person 4 (optional)
+│   ├── run_simulation.tcl               ← Person 4
 │
-├── docs/                   # Reports and references
-│   ├── architecture_diagram.pdf       ← All
-│   ├── README.md                      ← All (maintained by Person 4)
-│   ├── Project_Report.pdf             ← Final report
+├── docs/                   # Documentation
+│   ├── architecture_diagram.pdf         ← Team
+│   ├── README.md                        ← Maintained by Person 4
+│   ├── Project_Report.pdf               ← Final report
 │
 └── .gitignore
