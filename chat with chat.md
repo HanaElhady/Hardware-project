@@ -139,3 +139,25 @@ add $t0, $t1, $t2
 - **Multi-Cycle** أكثر واقعية وفعالية، ويُستخدم في المعالجات الفعلية غالبًا.
 
 ---
+# **مرحلة التنفيذ (Execution Cycle)**
+![image](https://github.com/user-attachments/assets/6dd2a5bf-c42a-4107-b2db-5a51a60a1608)
+
+
+1. **Memory Reference Instructions (SW, LW)**  
+   - دي التعليمات اللي بتتعامل مع الذاكرة.  
+   - في مرحلة التنفيذ، بيتم استخدام **ALU** لحساب عنوان الذاكرة.  
+   - **MUX** و **Sign Extension** بيشتغلوا هنا عشان يحددوا القيمة اللي تدخل ALU.
+
+2. **R-Type Instructions (زي add, sub, and...)**  
+   - هنا الـ **ALU** بتكون مسؤولة عن تنفيذ العملية (جمع، طرح...).  
+   - **MUX** يختار البيانات اللي هتدخل للـ ALU.  
+   - مش محتاجين Sign Extension لأن كله من الـ registers.
+
+3. **Branch Instructions (BEQ, BNE)**  
+   - الـ **ALU** بتستخدم لمقارنة القيم (هل قيمتين متساويتين أو لأ).  
+   - الناتج من الـ ALU بيحدد هل هنفرّع ولا لأ.  
+   - **Sign Extension** بتجهز الإزاحة (offset) اللي ممكن نضيفه للـ PC لو فيه فرع.
+
+4. **Jump Instructions (J, JAL)**  
+   - مش بيعتمدوا على ALU أو Shifter، لكن ممكن نحتاج بعض الـ MUXات عشان نغير قيمة الـ PC.  
+---
