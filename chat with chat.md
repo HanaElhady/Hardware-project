@@ -84,18 +84,6 @@
 
 ---
 
-## 🎓 مصادر ممكن تبدأي منها:
-
-- كتاب: *Computer Organization and Design* by Patterson & Hennessy.
-- كورسات على YouTube:
-  - Neso Academy – شرح الـ MIPS والـ datapath ممتاز.
-  - Coursera: "Digital Systems: From Logic Gates to Processors".
-- مواقع:
-  - https://www.coursera.org/learn/computer-organization
-  - https://www.geeksforgeeks.org/computer-organization-and-architecture/
-
----
-
 الفرق بين **Single-Cycle** و **Multi-Cycle** بيكون في طريقة تنفيذ التعليمات داخل المعالج، وده بيأثر على الأداء، الكفاءة، وتعقيد التصميم. خليني أوضحلك بشكل مبسط:
 
 ![image](https://github.com/user-attachments/assets/d657e66f-8c97-4776-815a-c63fddc791bb)
