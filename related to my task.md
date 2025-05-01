@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/47e616f6-0676-45d3-be50-8d40e78e70ab)
 ## 🎯 ثالثاً: دورك (Person 2) – إيه الأجزاء اللي مسؤولة عنها؟
 
 ### 1. **ALU (Arithmetic Logic Unit)**
@@ -100,3 +100,83 @@
 | **MUX**             | كل الأنواع                  | اختيار البيانات اللي تدخل للـ ALU أو تروح لـ Register/Memory. |
 
 ---
+
+![image](https://github.com/user-attachments/assets/4c12c5fe-cf1a-484f-b716-c1194071f160)
+
+**ALU Instruction (R-Type)**  
+→ ده نوع من التعليمات في MIPS اسمه **R-Type**، وده معناه إنه بيعتمد على 3 سجلات (registers).
+
+---
+
+### 📌 Format التعليمة:
+
+```
+Inst_name   rd, rs, rt
+```
+
+- `Inst_name` = اسم العملية (زي `add`, `sub`, `and`, `or`)
+- `rd` = السجل اللي هيتخزن فيه الناتج (**destination register**)
+- `rs` = أول مدخل (input 1)
+- `rt` = تاني مدخل (input 2)
+
+يعني مثلًا لو قلنا:
+```
+add $t0, $t1, $t2
+```
+ده معناه:
+```
+$t0 = $t1 + $t2
+```
+
+- القيمة اللي في `$t1` (rs) + القيمة اللي في `$t2` (rt) → تتخزن في `$t0` (rd)
+
+---
+
+### 🧠 إشارة OP:
+الصورة موضحة إن **rs** و **rt** رايحين لـ **دائرة ALU** (الدائرة الدائرية دي) عشان تعمل العملية اللي تم تحديدها بواسطة **OP code** أو **ALU control**.
+
+---
+
+### ✅ مثال بسيط على كود VHDL لـ `add`, `sub`, `and`, `or`:
+
+هفترض إن ALU بيشتغل على 32-bit أرقام:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity Simple_ALU is
+    Port (
+        rs     : in  std_logic_vector(31 downto 0);
+        rt     : in  std_logic_vector(31 downto 0);
+        ALUOp  : in  std_logic_vector(1 downto 0);  -- نحدد نوع العملية
+        result : out std_logic_vector(31 downto 0)
+    );
+end Simple_ALU;
+
+architecture Behavioral of Simple_ALU is
+begin
+    process(rs, rt, ALUOp)
+    begin
+        case ALUOp is
+            when "00" =>  -- ADD
+                result <= std_logic_vector(signed(rs) + signed(rt));
+            when "01" =>  -- SUB
+                result <= std_logic_vector(signed(rs) - signed(rt));
+            when "10" =>  -- AND
+                result <= rs and rt;
+            when "11" =>  -- OR
+                result <= rs or rt;
+            when others =>
+                result <= (others => '0');
+        end case;
+    end process;
+end Behavioral;
+```
+
+---
+
+لو عايزة أشرح الكود ده خطوة بخطوة أو نعمل كود يشمل حاجات أكتر زي Zero flag أو وحدة التحكم، قوليلي.
+
+تحبي ننتقل دلوقتي للـ Sign Extension أو تكملي في ALU؟
