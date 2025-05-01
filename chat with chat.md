@@ -1,8 +1,8 @@
 ## 🧠 أولاً: يعني إيه Multi-Cycle MIPS Processor؟
 
 المعالج (Processor) اللي بينفذ تعليمات MIPS بيعدّي بعدة مراحل أساسية:
-![Uploading image.png…]()
 
+![image](https://github.com/user-attachments/assets/d7eecd76-cd12-444d-89e1-c8e01b78d043)
 
 1. **Instruction Fetch (IF)** – جلب التعليمة من الذاكرة.
 2. **Instruction Decode (ID)** – فك شفرة التعليمة وتجهيز البيانات.
