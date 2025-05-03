@@ -41,11 +41,11 @@ begin
         end case;
 
         -- Set zero flag
-        if result = (others => '0') then
-            zero <= '1';
-        else
-            zero <= '0';
-        end if;
+        if result = x"00000000" then
+   		zero <= '1';
+	else
+    		zero <= '0';
+	end if;
     end process;
 
     ALUResult <= result;
