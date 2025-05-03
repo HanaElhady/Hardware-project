@@ -639,6 +639,167 @@ So the control signals are:
 
 It’s either one **or** the other — just as you said: **if one is 1, the other is 0**, because they represent different actions on memory.
 
-Would you like a truth table or a visual walkthrough of what happens in `lw` vs `sw`?
+---
+
+![image](https://github.com/user-attachments/assets/6b7ed501-dfd1-4293-bd07-f5923ab9ee25)
+
+Great questions! Let's walk through everything **step-by-step** with **clear explanations** and **no jargon**, so you fully understand these core ideas.
+
+---
+
+### 🔁 What is a Jump?
+
+A **jump (`j`)** is like saying:
+
+> "Forget the normal order. I want the CPU to go directly to a specific instruction somewhere else in memory."
+
+* It's **unconditional** – it always happens.
+* Example: `j 1000` means → "Go to instruction at address 1000".
+
+So the **CPU sets the Program Counter (PC)** to this new address instead of just going to the next instruction.
+
+---
+
+### 🤔 What is Branch on Equal (`beq`)?
+
+Branching is **like a decision**: "If condition is true, jump somewhere. Otherwise, continue normally."
+
+`beq $t1, $t2, label` means:
+
+> “If `$t1 == $t2`, go to the instruction labeled `label`. Otherwise, just go to the next instruction.”
+
+This is how loops and `if` statements work in assembly language.
+
+---
+
+### 💡 Why Compare Registers? (Why equality matters)
+
+To make **decisions**, the CPU needs to **compare data**.
+
+Let’s say you’re writing code like:
+
+```c
+if (x == y) {
+    // do something
+}
+```
+
+In assembly, this turns into:
+
+```asm
+beq $t1, $t2, LABEL
+```
+
+So comparing register values lets the CPU **decide** what to do next. If they are equal → branch. If not → move on.
+
+---
+
+### 🧮 What’s with Shifting and Word-Aligned Addresses?
+
+In MIPS (the architecture here):
+
+* **Each instruction is 4 bytes (32 bits)**.
+* Memory addresses increase in steps of 4: `0, 4, 8, 12, ...`
+* This is called **word-aligned**.
+
+When an instruction says “jump 2 instructions ahead”, we multiply that number by 4 to get the byte offset → hence the **shift left by 2** (i.e., multiply by 4).
+
+---
+
+### 🧱 Why do we Shift the Offset Left 2 Bits?
+
+Because:
+
+* The **instruction gives an offset in words**, not bytes.
+* But memory addresses are in bytes.
+* So, we **shift left 2 bits** (multiply by 4) to convert the word offset into a byte offset.
+
+#### Example:
+
+If offset = `3` (as in `beq $t1, $t2, 3`)
+
+* It's really 3 \* 4 = 12 bytes forward
+* So the branch target = `PC + 4 + 12`
+
+---
+
+### 🔗 Putting It All Together
+
+| Instruction       | Meaning                                                                   |
+| ----------------- | ------------------------------------------------------------------------- |
+| `beq $s0, $s1, 4` | If \$s0 == \$s1, go 4 instructions ahead (i.e., `PC + 4 + (4 × 4)` bytes) |
+| `j 1024`          | Go directly to address 1024 (no condition)                                |
+
+---
+
+Would a real-world analogy (like a train stopping at stations vs. skipping them) help solidify this further?
+
+---
+
+### ✅ **Clarifying `beq` (Branch if Equal):**
+
+> "So `beq` first checks, and if the result is 1, we jump. If not, we continue normally."
+
+**Exactly right.** Here’s how it works:
+
+1. `beq $s0, $s1, label` means:
+
+   * Compare contents of `$s0` and `$s1`
+2. If they are **equal**, the ALU sets a flag called **Zero = 1**
+3. That Zero flag tells the control unit: “Yes, branch!”
+4. So the CPU **jumps** to the instruction at `label`
+5. If they’re **not equal**, Zero = 0 → the CPU just goes to the **next instruction**
+
+---
+
+### ❓ Is the Jump Like a “Priority” Instruction?
+
+That’s a good question. The short answer is:
+
+> **No, it’s not higher priority. It’s a control flow change.**
+
+* The **jump or branch isn't more important**, it just tells the CPU:
+  “Next, don’t go to the next line. Go to this specific address instead.”
+* It’s like giving directions:
+
+  * Normally: go to the next house
+  * With `beq` (or `j`): if the condition is met, take a shortcut or detour
+
+---
+
+### 🚦Analogy Time: Traffic Light
+
+* You're driving (executing instructions)
+* **Green light = go to the next instruction**
+* **Beq is like a detour sign**:
+
+  * “If the road is blocked (condition met), turn left”
+  * Otherwise, keep going straight
+
+---
+
+### 🧭 Summary of Concepts:
+
+| Concept       | Meaning                                                 |
+| ------------- | ------------------------------------------------------- |
+| `beq`         | Branches *only if* two registers are equal              |
+| `Zero = 1`    | ALU found the values are equal (subtraction result = 0) |
+| Jump (`j`)    | Always goes to a new address, no condition              |
+| Shift left 2  | Converts word offset to byte offset (multiplies by 4)   |
+| PC + 4        | The address of the next instruction normally            |
+| Branch target | PC + 4 + shifted offset                                 |
+
+---
+
+### 💬 Think of Jump Like This:
+
+* You're reading a recipe.
+* Normally, you follow step by step.
+* But it says: “**If you already boiled the pasta, skip to Step 7**.”
+* That “skip to Step 7” is like a **jump**.
+
+---
+
+
 
 
