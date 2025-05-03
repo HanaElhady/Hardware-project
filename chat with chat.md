@@ -643,7 +643,93 @@ It’s either one **or** the other — just as you said: **if one is 1, the othe
 
 ![image](https://github.com/user-attachments/assets/6b7ed501-dfd1-4293-bd07-f5923ab9ee25)
 
-Great questions! Let's walk through everything **step-by-step** with **clear explanations** and **no jargon**, so you fully understand these core ideas.
+Sure! Let's break this down clearly and explain both the **branch on equal (`beq`)** instruction and the flow shown in the **Figure 2.8 datapath**.
+
+---
+
+### 🔄 **Summary: beq Instruction Flow**
+
+The `beq` instruction is used for conditional branching. It checks **if two registers are equal**, and **if they are**, the program branches (jumps) to a target address. If not, it continues to the next instruction.
+
+**Operands in `beq`**:
+
+* Two registers to compare (e.g., `beq $t1, $t2, label`)
+* A **16-bit offset** to calculate the **branch target address** (relative to current instruction)
+
+---
+
+### 🧠 **What Happens Internally (as shown in the diagram)**
+
+This datapath does two main things:
+
+1. **Compares the contents of two registers**
+2. **Computes the branch target address** if they are equal
+
+---
+
+### ✅ **Step-by-Step Flow in the Datapath Diagram**:
+
+1. **Instruction Input**:
+
+   * The `beq` instruction is fetched and enters the datapath.
+   * The instruction provides:
+
+     * 2 registers to compare
+     * A 16-bit offset value
+
+2. **Register File Access**:
+
+   * Two **read registers** are selected based on the instruction.
+   * Their **values (Read data 1 & Read data 2)** are fetched from the register file.
+
+3. **ALU Comparison**:
+
+   * The ALU subtracts `Read data 1 - Read data 2`.
+   * If the result is **zero**, it means the values are **equal** → ALU outputs **Zero = 1**.
+   * This **Zero flag** is sent to the **branch control logic**.
+
+4. **Sign Extend & Shift**:
+
+   * The **16-bit offset** is sign-extended to 32 bits.
+   * It’s then **shifted left by 2 bits** to make it a word-aligned address (because instructions are word-aligned).
+
+5. **Branch Target Address Calculation**:
+
+   * The **PC + 4** (address of the next instruction) is added to the **shifted offset**.
+   * The result is the **branch target address**.
+
+6. **Decision to Branch**:
+
+   * If the **Zero flag is 1** (i.e., registers are equal), the branch control logic selects the **branch target address** as the next PC.
+
+---
+
+### 🪂 **Jump vs. Branch (from 2.1.5)**:
+
+* **Branch (`beq`)**:
+
+  * **Conditional**
+  * Uses **offset + PC + 4**
+* **Jump (`j`)**:
+
+  * **Unconditional**
+  * Builds the jump address differently:
+
+    * Takes upper 4 bits of `PC+4`
+    * Adds 26-bit address from instruction
+    * Appends 2 zeros at the end (since instructions are word-aligned)
+
+---
+
+### 🖼️ Diagram Focus Highlights:
+
+* **Registers block**: Reads operands and outputs their values
+* **ALU**: Compares the register values
+* **Sign Extend & Shift Left 2**: Prepares the offset
+* **Add Unit**: Computes final target address
+* **MUX**: Selects between continuing sequentially or branching
+
+Would you like a simplified visual walkthrough or animation-style step list of how this works for an example instruction like `beq $t1, $t2, label`?
 
 ---
 
