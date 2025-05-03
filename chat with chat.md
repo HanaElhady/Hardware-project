@@ -182,21 +182,6 @@ After fetching one instruction from the instruction memory, the program counter 
 
 
 ---
-
-![image](https://github.com/user-attachments/assets/34d0241f-ef88-456a-b192-52d8e1802819)
-
-The MIPS instructions we focus on typically read two registers, perform an ALU operation, and then write the result back to a register. These arithmetic and logical operations are known as **R-type instructions** (as described in \[PaHe98], p. 154), and include instructions such as `add`, `sub`, `slt`, `and`, and `or`.
-
-The processor contains **32 general-purpose registers**, organized in a component called the **Register File**.
-
-* To **read data**, the Register File requires **two 5-bit input lines**, each specifying a register number, and provides **two 32-bit output lines** carrying the corresponding register values.
-* To **write data**, it needs **one 5-bit input** to indicate the destination register and **one 32-bit input** to supply the data to be written.
-
-  ![image](https://github.com/user-attachments/assets/9d1c5bab-ae3f-41cd-a3d7-34826a4580ff)
-
-
----
-
 ### 🌟 What is a **Register**?
 
 A **register** is a small, fast memory location inside the processor.
@@ -226,6 +211,17 @@ It's useful for making decisions (like in `if` statements).
 
 ---
 
+![image](https://github.com/user-attachments/assets/34d0241f-ef88-456a-b192-52d8e1802819)
+
+The MIPS instructions we focus on typically read two registers, perform an ALU operation, and then write the result back to a register. These arithmetic and logical operations are known as **R-type instructions** (as described in \[PaHe98], p. 154), and include instructions such as `add`, `sub`, `slt`, `and`, and `or`.
+
+The processor contains **32 general-purpose registers**, organized in a component called the **Register File**.
+
+* To **read data**, the Register File requires **two 5-bit input lines**, each specifying a register number, and provides **two 32-bit output lines** carrying the corresponding register values.
+* To **write data**, it needs **one 5-bit input** to indicate the destination register and **one 32-bit input** to supply the data to be written.
+  
+---
+
 ### 🧠 Why **32 registers**?
 
 MIPS architecture is **designed with 32 general-purpose registers** to:
@@ -235,7 +231,6 @@ MIPS architecture is **designed with 32 general-purpose registers** to:
 * Follow standard ISA conventions (MIPS is designed this way).
 
 ---
-
 ### 🔌 Why **two 5-bit inputs**?
 
 To select a register, we need to **specify its number** (0 to 31).
@@ -271,23 +266,6 @@ The processor:
 1. **Reads** the values in `$t1` and `$t2` → needs two 5-bit inputs (to choose the registers), and two 32-bit outputs (the data in the registers).
 2. **Sends them to the ALU**, which adds the values.
 3. **Writes** the result into `$t0` → needs one 5-bit input (to choose the destination register) and one 32-bit input (the result).
-
----
-### 🧠 Why do we **choose** a register?
-
-Think of **registers like lockers in a gym**. Each locker has a number (0 to 31). If you want to:
-
-* Get something from a locker,
-* Or put something into a locker,
-
-You have to **specify the locker number**. The CPU works the same way—it has to **select** which register to use.
-
-So:
-
-* To **read** from a register, you must tell the CPU **which one** (e.g., register 5? register 12?).
-* To **write** to a register, again you must **choose which** register to write into.
-
-That’s why we need **5-bit addresses** (to select one of 32 registers).
 
 ---
 
@@ -329,5 +307,117 @@ So now register 8 stores the value `42`.
 
 ---
 
+  ![image](https://github.com/user-attachments/assets/9d1c5bab-ae3f-41cd-a3d7-34826a4580ff)
 
+
+```
+add $t0, $t1, $t2
+```
+
+Which means:
+
+```
+$t0 = $t1 + $t2
+```
+
+Now step-by-step through the diagram:
+
+---
+
+### 📥 **Instruction**
+
+* The instruction comes into the datapath.
+
+* For this `add` instruction, the 32-bit format is:
+
+  ```
+  op   rs   rt   rd   shamt  funct
+  000000 01001 01010 01000 00000 100000
+   add  $t1   $t2   $t0   -      add
+  ```
+
+* So:
+
+  * `rs` (source 1) = `$t1` = register 9
+  * `rt` (source 2) = `$t2` = register 10
+  * `rd` (destination) = `$t0` = register 8
+
+---
+
+### 📌 **Read register 1**
+
+* Input: `rs` = 9 → selects register 9
+* Output: **Read data 1** = value of `$t1`, say **7**
+
+---
+
+### 📌 **Read register 2**
+
+* Input: `rt` = 10 → selects register 10
+* Output: **Read data 2** = value of `$t2`, say **5**
+
+---
+
+### 🧠 **These two values go into the ALU**
+
+* ALU operation: `add`
+* Inputs: 7 and 5
+* Output: 12
+
+---
+
+### 📌 **Write register**
+
+* Input: `rd` = 8 → tells the register file to write to register 8 (`$t0`)
+
+---
+
+### 📌 **Write data**
+
+* Input: the result from the ALU = **12**
+* This is what gets written into register 8
+
+---
+
+### ✅ **RegWrite**
+
+* A control signal that enables writing to the register file.
+* Set to `1` (enabled) for this instruction
+
+---
+
+### 🧾 Summary Table for `add $t0, $t1, $t2`
+
+| Signal          | Value               | Purpose              |
+| --------------- | ------------------- | -------------------- |
+| Instruction     | `add $t0, $t1, $t2` | Encoded in 32 bits   |
+| Read register 1 | 9                   | Selects `$t1`        |
+| Read register 2 | 10                  | Selects `$t2`        |
+| Write register  | 8                   | Targets `$t0`        |
+| Read data 1     | 7                   | Value in `$t1`       |
+| Read data 2     | 5                   | Value in `$t2`       |
+| ALU operation   | `add`               | Adds the inputs      |
+| ALU result      | 12                  | Output of `7 + 5`    |
+| Write data      | 12                  | What goes into `$t0` |
+| RegWrite        | 1                   | Enables the write    |
+
+---
+
+### 🧠 Why do we **choose** a register?
+
+Think of **registers like lockers in a gym**. Each locker has a number (0 to 31). If you want to:
+
+* Get something from a locker,
+* Or put something into a locker,
+
+You have to **specify the locker number**. The CPU works the same way—it has to **select** which register to use.
+
+So:
+
+* To **read** from a register, you must tell the CPU **which one** (e.g., register 5? register 12?).
+* To **write** to a register, again you must **choose which** register to write into.
+
+That’s why we need **5-bit addresses** (to select one of 32 registers).
+
+---
 
