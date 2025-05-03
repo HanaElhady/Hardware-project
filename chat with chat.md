@@ -729,8 +729,6 @@ This datapath does two main things:
 * **Add Unit**: Computes final target address
 * **MUX**: Selects between continuing sequentially or branching
 
-Would you like a simplified visual walkthrough or animation-style step list of how this works for an example instruction like `beq $t1, $t2, label`?
-
 ---
 
 ### 🔁 What is a Jump?
@@ -808,6 +806,16 @@ If offset = `3` (as in `beq $t1, $t2, 3`)
 * So the branch target = `PC + 4 + 12`
 
 ---
+### 💡 How Do We Convert?
+
+We use a **shift left by 2 bits**, which multiplies the number by 4.
+
+> So yes, **because we need 3 → 12**, we shift it left by 2.
+
+#### Example:
+
+* Offset in instruction: `0000 0000 0000 0011` (which is 3)
+* After shift left 2 bits: `0000 0000 0000 1100` → now it's 12 (in binary)
 
 ### 🔗 Putting It All Together
 
@@ -816,9 +824,6 @@ If offset = `3` (as in `beq $t1, $t2, 3`)
 | `beq $s0, $s1, 4` | If \$s0 == \$s1, go 4 instructions ahead (i.e., `PC + 4 + (4 × 4)` bytes) |
 | `j 1024`          | Go directly to address 1024 (no condition)                                |
 
----
-
-Would a real-world analogy (like a train stopping at stations vs. skipping them) help solidify this further?
 
 ---
 
