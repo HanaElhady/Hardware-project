@@ -192,6 +192,9 @@ The processor contains **32 general-purpose registers**, organized in a componen
 * To **read data**, the Register File requires **two 5-bit input lines**, each specifying a register number, and provides **two 32-bit output lines** carrying the corresponding register values.
 * To **write data**, it needs **one 5-bit input** to indicate the destination register and **one 32-bit input** to supply the data to be written.
 
+  ![image](https://github.com/user-attachments/assets/9d1c5bab-ae3f-41cd-a3d7-34826a4580ff)
+
+
 ---
 
 ### 🌟 What is a **Register**?
@@ -270,5 +273,61 @@ The processor:
 3. **Writes** the result into `$t0` → needs one 5-bit input (to choose the destination register) and one 32-bit input (the result).
 
 ---
+### 🧠 Why do we **choose** a register?
+
+Think of **registers like lockers in a gym**. Each locker has a number (0 to 31). If you want to:
+
+* Get something from a locker,
+* Or put something into a locker,
+
+You have to **specify the locker number**. The CPU works the same way—it has to **select** which register to use.
+
+So:
+
+* To **read** from a register, you must tell the CPU **which one** (e.g., register 5? register 12?).
+* To **write** to a register, again you must **choose which** register to write into.
+
+That’s why we need **5-bit addresses** (to select one of 32 registers).
+
+---
+
+### 📥 Why do we need separate **data inputs**?
+
+Once you choose a register, you still need to:
+
+* Give it **data to store** (when writing),
+* Or **get its data out** (when reading).
+
+So there's a difference between:
+
+* 🔢 The **5-bit input**: says *"which register?"*
+* 📦 The **32-bit input/output**: is the *actual data* going in or out of the register
+
+---
+
+### 🧮 Example: Writing a value into a register
+
+Imagine we want to put the number `42` into register `$t0` (which is register 8).
+
+In hardware, that would mean:
+
+* 5-bit input: `01000` (this selects register 8)
+* 32-bit input: `0000...101010` (this is the binary of 42)
+* The control signal `RegWrite` would be `1` to allow writing
+
+So now register 8 stores the value `42`.
+
+---
+
+### ✅ Summary
+
+| Purpose                                 | Bits    | Why it's needed                           |
+| --------------------------------------- | ------- | ----------------------------------------- |
+| **Choose which register** to read/write | 5 bits  | 32 registers → needs 5 bits to select one |
+| **Move data in/out** of the register    | 32 bits | Each register stores a 32-bit value       |
+| **Control signals** (like RegWrite)     | 1 bit   | Enables the write operation               |
+
+---
+
 
 
