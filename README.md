@@ -4,6 +4,9 @@
 
 This project implements a 32-bit MIPS processor using VHDL, following a multi-cycle architecture. The tasks are divided among four team members:
 
+![image](https://github.com/user-attachments/assets/457b161f-330b-4327-a1f6-654b79f0fda0)
+
+
 ---
 
 ### 👤 Person 1 – Memory & Register File
