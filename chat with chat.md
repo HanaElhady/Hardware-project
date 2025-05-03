@@ -583,4 +583,62 @@ It **doesn’t store** anything — it just stretches the bits to match ALU size
 
 ---
 
+![image](https://github.com/user-attachments/assets/49f40396-f46b-4009-a841-494e128de5dc)
+
+---
+
+### 👇 In the diagram:
+
+* There are **two control signals** coming into the **Data Memory** block:
+
+  * `MemWrite`
+  * `MemRead`
+
+And another control signal:
+
+* `RegWrite` to the **Registers** block.
+
+---
+
+### ✅ What happens depending on the instruction?
+
+#### 📌 If the instruction is **`lw` (load word)**:
+
+* The processor should:
+
+  * Compute the address (via ALU),
+  * **Read** from memory at that address,
+  * **Write** that data into a register.
+
+So the control signals are:
+
+* `MemRead = 1`
+* `MemWrite = 0`
+* `RegWrite = 1`
+
+#### 📌 If the instruction is **`sw` (store word)**:
+
+* The processor should:
+
+  * Compute the address (via ALU),
+  * **Write** register data into memory at that address,
+  * **Not write** anything back to a register.
+
+So the control signals are:
+
+* `MemRead = 0`
+* `MemWrite = 1`
+* `RegWrite = 0`
+
+---
+
+### 🧠 Therefore, yes — **there is a condition (based on the instruction opcode)**, and the control unit ensures that:
+
+* When `sw` is active → `MemWrite = 1`, `MemRead = 0`, `RegWrite = 0`
+* When `lw` is active → `MemWrite = 0`, `MemRead = 1`, `RegWrite = 1`
+
+It’s either one **or** the other — just as you said: **if one is 1, the other is 0**, because they represent different actions on memory.
+
+Would you like a truth table or a visual walkthrough of what happens in `lw` vs `sw`?
+
 
