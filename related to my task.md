@@ -285,5 +285,48 @@ end Behavioral;
 
 ---
 
-تحبي أبدأ أساعدك تصممي ALU كبداية ولا نرسم مع بعض الـ Sign Extension الأول؟
+### Alu.vhd
+
+
+### 🔍 The line:
+
+```vhdl
+result <= (31 downto 1 => '0') & '1';
+```
+So the result becomes:
+
+```text
+0000_0000_0000_0000_0000_0000_0000_0001
+```
+
+This is needed in the **SLT (Set Less Than)** operation — it sets the least significant bit to `1` if `rs < rd`, and the rest to `0`.
+
+---
+
+### 🤔 Why not use `(others => '0')` and then overwrite bit 0?
+
+You **could** do this in two steps:
+
+```vhdl
+result <= (others => '0');
+result(0) <= '1';
+```
+
+But VHDL doesn't allow assigning the same signal twice *in the same clocked or combinational process* without it being handled correctly (e.g., with a variable or intermediate signal).
+
+So instead, this:
+
+```vhdl
+result <= (31 downto 1 => '0') & '1';
+```
+
+Is a **compact one-liner** that builds the exact value you need *in a safe, synthesizable way*.
+
+---
+
+### 💡 Why not `(others => '0') & '1'`?
+
+Because `(others => '0')` creates a full 32-bit vector — you can’t concatenate a `'1'` to it (you’d get 33 bits — invalid).
+
+---
 
