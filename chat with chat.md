@@ -185,6 +185,14 @@ After fetching one instruction from the instruction memory, the program counter 
 
 ![image](https://github.com/user-attachments/assets/34d0241f-ef88-456a-b192-52d8e1802819)
 
+The MIPS instructions we focus on typically read two registers, perform an ALU operation, and then write the result back to a register. These arithmetic and logical operations are known as **R-type instructions** (as described in \[PaHe98], p. 154), and include instructions such as `add`, `sub`, `slt`, `and`, and `or`.
+
+The processor contains **32 general-purpose registers**, organized in a component called the **Register File**.
+
+* To **read data**, the Register File requires **two 5-bit input lines**, each specifying a register number, and provides **two 32-bit output lines** carrying the corresponding register values.
+* To **write data**, it needs **one 5-bit input** to indicate the destination register and **one 32-bit input** to supply the data to be written.
+
+---
 
 ### 🌟 What is a **Register**?
 
