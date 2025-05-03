@@ -420,4 +420,167 @@ So:
 That’s why we need **5-bit addresses** (to select one of 32 registers).
 
 ---
+# Load word (lw) and store word (sw) instructions
+
+### Additional Elements for `lw` and `sw` Instructions
+
+To support `lw` (load word) and `sw` (store word) instructions in a MIPS datapath, **two additional components** are required:
+
+![image](https://github.com/user-attachments/assets/70206eb4-41b2-4407-965e-35808875aedf)
+
+1. **Data Memory** – for reading from and writing to memory.
+2. **Sign Extension Unit** – for converting 16-bit immediate offsets to 32-bit values.
+
+#### Memory Address Calculation
+
+Both `lw` and `sw` instructions compute a **memory address** by **adding**:
+
+* A value from a **base register**, and
+* A **16-bit signed offset** provided in the instruction.
+
+Since the ALU operates on **32-bit values**, the 16-bit offset must first be **sign-extended** to 32 bits. This is done by replicating the **sign bit** (the most significant bit of the 16-bit offset) to fill the upper 16 bits. This preserves the offset’s sign in 32-bit form.
+
+![image](https://github.com/user-attachments/assets/a8f08fd2-374e-4272-9d5f-b969e3bff858)
+
+
+---
+### 🧠 What are `lw` and `sw` Instructions?
+
+These are **I-type (Immediate-type)** MIPS instructions used for **memory access**:
+
+| Instruction | Meaning        | Purpose                                    |
+| ----------- | -------------- | ------------------------------------------ |
+| `lw`        | **Load Word**  | Loads 4 bytes from memory into a register  |
+| `sw`        | **Store Word** | Stores 4 bytes from a register into memory |
+
+---
+
+### 🧾 Syntax:
+
+* **`lw $t1, 8($t2)`**
+  → Load the word from memory address `$t2 + 8` into `$t1`
+
+* **`sw $t1, 8($t2)`**
+  → Store the word in `$t1` into memory address `$t2 + 8`
+
+Here:
+
+* `$t2` = base address
+* `8` = offset
+* Offset is a **signed 16-bit immediate** (can be negative)
+
+---
+
+### 🔁 Data Path Flow of `lw $t1, 8($t2)`
+
+1. **Instruction fetched** from memory (e.g., `lw $t1, 8($t2)`).
+
+2. The instruction fields are:
+
+   * Base register = `$t2`
+   * Offset = `8`
+   * Destination register = `$t1`
+
+3. **Register file** reads:
+
+   * Value of `$t2` (base address)
+
+4. **Sign-extension unit**:
+
+   * Converts the 16-bit offset `8` to a 32-bit signed value
+
+5. **ALU**:
+
+   * Adds `$t2` value + extended offset to calculate the memory address
+
+6. **Data memory**:
+
+   * Reads the 32-bit word stored at the calculated memory address
+
+7. **Register file**:
+
+   * Writes the data to register `$t1`
+
+---
+
+### 🔁 Data Path Flow of `sw $t1, 8($t2)`
+
+Same steps as `lw`, except:
+
+* The register file reads both `$t1` (data to store) and `$t2` (base address)
+* ALU calculates address as `$t2 + 8`
+* **Data Memory** writes the value in `$t1` to the computed address
+
+---
+
+### 🔧 Example:
+
+Assume:
+
+* `$t2 = 1000` (base address)
+* `$t1 = 42` (value to store)
+* `sw $t1, 8($t2)`
+
+Then:
+
+* Effective address = `1000 + 8 = 1008`
+* Memory location 1008 will store the value `42`
+
+---
+
+### 📦 1. Why We Need **Memory** If We Have **Registers**
+
+Think of it like this:
+
+| Registers (like \$t0, \$t1...) | Memory (RAM)                                  |
+| ------------------------------ | --------------------------------------------- |
+| Very small (only 32 registers) | Very large (can be thousands of words)        |
+| Super fast to access           | Slower than registers                         |
+| Used for quick calculations    | Used to store large data, arrays, files, etc. |
+| Inside the CPU                 | Outside CPU, but connected to it              |
+
+#### ✅ Analogy:
+
+Imagine registers as your **desk space** — fast and right in front of you. But it’s small.
+
+Memory is like your **bookshelf** — holds lots of info, but you need to go over and get stuff from it.
+
+When you're writing programs, 32 registers are NOT enough to store everything, so you store most data in memory (RAM), and move it into registers only when needed (using `lw`) or back into memory (using `sw`).
+
+---
+
+### 🔁 2. Why We Need a **Sign Extension Unit**
+
+The **Sign Extension Unit** is *not memory*. It’s a small logic circuit that takes a **16-bit signed number** and turns it into a **32-bit signed number**, preserving its value.
+
+#### Example:
+
+You have this instruction:
+
+```
+lw $t1, -4($t2)
+```
+
+Here `-4` is a 16-bit number: `1111 1111 1111 1100`
+
+The ALU needs a 32-bit number. So the sign extender takes this 16-bit value and makes it:
+
+```
+1111 1111 1111 1111 1111 1111 1111 1100   ← still -4 in 32-bit
+```
+
+It **doesn’t store** anything — it just stretches the bits to match ALU size.
+
+---
+
+### ✅ Summary
+
+| Component             | What It Does                           | Is It Memory? |
+| --------------------- | -------------------------------------- | ------------- |
+| **Registers**         | Fast small storage inside CPU          | ✅ Yes (small) |
+| **Main Memory (RAM)** | Big storage for program/data           | ✅ Yes         |
+| **Sign Extender**     | Just extends a 16-bit number to 32-bit | ❌ No (logic)  |
+
+---
+
 
