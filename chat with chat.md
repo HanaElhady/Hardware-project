@@ -161,3 +161,106 @@ add $t0, $t1, $t2
 4. **Jump Instructions (J, JAL)**  
    - مش بيعتمدوا على ALU أو Shifter، لكن ممكن نحتاج بعض الـ MUXات عشان نغير قيمة الـ PC.  
 ---
+
+---
+## Resource : 
+
+#### Book : Processor Implementation in VHDL According to Computer Organisation & Design by David A. Patterson and John L. Hennessy
+
+
+To begin understanding how MIPS instructions are executed, we first identify the essential components and how they are connected.
+
+![image](https://github.com/user-attachments/assets/57c63c82-12be-4b9b-9ebd-cf743e0b2022)
+
+**Instruction Memory**  which stores the program instructions and provides them based on a given address.
+This address is held in the **Program Counter (PC)**, which keeps track of the current instruction.
+To move to the next instruction, we use an **Adder** that increments the PC by 4 (since each instruction is 4 bytes long), updating it to the address of the next instruction.
+
+After fetching one instruction from the instruction memory, the program counter has to be incremented so that it points to the address of the next instruction 4 bytes later.
+
+![image](https://github.com/user-attachments/assets/0cc9df4d-2e7f-4663-aa9c-04806f48221c)
+
+
+---
+
+![image](https://github.com/user-attachments/assets/34d0241f-ef88-456a-b192-52d8e1802819)
+
+
+### 🌟 What is a **Register**?
+
+A **register** is a small, fast memory location inside the processor.
+Think of it like a **named box** that temporarily holds data (usually numbers) while the CPU is working.
+
+In MIPS, we have **32 registers**, named `$0, $1, ..., $31`. Each register holds **32 bits** (i.e., 4 bytes) of data.
+
+---
+
+### 🧮 What is `slt`?
+
+`slt` stands for **Set on Less Than**.
+It's an instruction used to compare two numbers.
+
+#### Example:
+
+```assembly
+slt $t0, $t1, $t2
+```
+
+This means:
+
+> If the value in `$t1` is **less than** the value in `$t2`, then set `$t0 = 1`.
+> Otherwise, set `$t0 = 0`.
+
+It's useful for making decisions (like in `if` statements).
+
+---
+
+### 🧠 Why **32 registers**?
+
+MIPS architecture is **designed with 32 general-purpose registers** to:
+
+* Make the CPU fast (data in registers is accessed faster than in memory),
+* Be efficient (not too few, not too many),
+* Follow standard ISA conventions (MIPS is designed this way).
+
+---
+
+### 🔌 Why **two 5-bit inputs**?
+
+To select a register, we need to **specify its number** (0 to 31).
+And to represent numbers from 0 to 31 in binary, we need **5 bits** (because 2⁵ = 32).
+
+So:
+
+* We need **two 5-bit inputs** to read from **two registers** (e.g., source operands for `add`, `slt`, etc.)
+
+---
+
+### 🔄 Why **two 32-bit outputs**?
+
+Each register stores a 32-bit value (since MIPS is a 32-bit architecture).
+So when we read data from two registers, we get **two 32-bit outputs**.
+
+---
+
+### ✅ Example in practice:
+
+Imagine this instruction:
+
+```assembly
+add $t0, $t1, $t2
+```
+
+This means:
+
+> \$t0 = \$t1 + \$t2
+
+The processor:
+
+1. **Reads** the values in `$t1` and `$t2` → needs two 5-bit inputs (to choose the registers), and two 32-bit outputs (the data in the registers).
+2. **Sends them to the ALU**, which adds the values.
+3. **Writes** the result into `$t0` → needs one 5-bit input (to choose the destination register) and one 32-bit input (the result).
+
+---
+
+
