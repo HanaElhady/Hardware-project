@@ -4,15 +4,15 @@ use ieee.numeric_std.all;
 
 entity Alu is 
     port (
-        rs, rd       : in std_logic_vector(31 downto 0);	
+        rs, rd       : in signed(31 downto 0);	
         ALUControl   : in std_logic_vector(3 downto 0);
-        ALUResult    : out std_logic_vector(31 downto 0);
+        ALUResult    : out signed(31 downto 0);
         zero         : out std_logic
     );		
 end entity;
 
 architecture sims of Alu is
-    signal result : std_logic_vector(31 downto 0);
+    signal result : signed(31 downto 0);  
 begin 		
     process(rs, rd, ALUControl)
     begin
@@ -24,13 +24,13 @@ begin
                 result <= rs or rd;
 
             when "0010" =>  -- ADD
-                result <= std_logic_vector(signed(rs) + signed(rd));
+                result <= rs + rd;
 
             when "0110" =>  -- SUB
-                result <= std_logic_vector(signed(rs) - signed(rd));
+                result <= rs - rd;
 
             when "0111" =>  -- SLT
-                if signed(rs) < signed(rd) then
+                if rs < rd then
                     result <= (31 downto 1 => '0') & '1';
                 else
                     result <= (others => '0');
@@ -42,11 +42,13 @@ begin
 
         -- Set zero flag
         if result = x"00000000" then
-   		zero <= '1';
-	else
-    		zero <= '0';
-	end if;
+            zero <= '1';
+        else
+            zero <= '0';
+        end if;
+
     end process;
+
 
     ALUResult <= result;
 
