@@ -3,6 +3,8 @@
 ## 📁 Multi-Cycle MIPS Processor - Project Structure
 
 This project implements a 32-bit MIPS processor using VHDL, following a multi-cycle architecture. The tasks are divided among four team members:
+![image](https://github.com/user-attachments/assets/7c0347d7-ed10-426d-b46c-993aa8792819)
+
 
 ---
 
