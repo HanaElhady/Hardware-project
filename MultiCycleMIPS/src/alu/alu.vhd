@@ -12,32 +12,32 @@ entity Alu is
 end entity;
 
 architecture sims of Alu is
-    signal result : signed(31 downto 0);  
 begin 		
-    process(rs, rd, ALUControl)
+    process(rs, rd, ALUControl)	 
+	VARIABLE result : signed(31 downto 0);  
     begin
         case ALUControl is
             when "0000" =>  -- AND
-                result <= rs and rd;
+                result := rs and rd;
 
             when "0001" =>  -- OR
-                result <= rs or rd;
+                result := rs or rd;
 
             when "0010" =>  -- ADD
-                result <= rs + rd;
+                result := rs + rd;
 
             when "0110" =>  -- SUB
-                result <= rs - rd;
+                result := rs - rd;
 
             when "0111" =>  -- SLT
                 if rs < rd then
-                    result <= (31 downto 1 => '0') & '1';
+                    result := (31 downto 1 => '0') & '1';
                 else
-                    result <= (others => '0');
+                    result := (others => '0');
                 end if;
 
             when others =>
-                result <= (others => '0');
+                result := (others => '0');
         end case;
 
         -- Set zero flag
@@ -46,12 +46,12 @@ begin
         else
             zero <= '0';
         end if;
-
+		
+		ALUResult <= result;
     end process;
 
 
-    ALUResult <= result;
-
 end architecture;
+
 
 	
