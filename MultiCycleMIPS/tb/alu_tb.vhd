@@ -20,9 +20,8 @@ begin
             ALUControl => ALUControl,
             zero       => zero
         );
-
-    -- Stimulus Process
-    stim_proc: process
+	    
+    process
     begin
         ------------------------------------------------------------------------
         -- Basic Arithmetic and Logic Tests
