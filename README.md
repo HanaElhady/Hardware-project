@@ -9,19 +9,19 @@ This project implements a 32-bit MIPS processor using VHDL, following a multi-cy
 
 ---
 
-### 👤 Person 1 – Memory & Register File
+### 👤 Person 1 – Memory & Register File 
 Handles memory units and basic register components.
 
 
 ---
 
-### 👤 Person 2 – ALU, Shifter, Sign Extension, MUX
+### 👤 Person 2 – ALU, Shifter, Sign Extension, MUX ✅
 Implements the arithmetic and logic units, shifters, and multiplexers.
 
 
 ---
 
-### 👤 Person 3 – Control Unit
+### 👤 Person 3 – Control Unit ✅
 Implements instruction decoding and control signal generation.
 
 
@@ -49,16 +49,16 @@ MultiCycleMIPS/
 │   │   ├── pc.vhd                        ← Person 1
 │   │
 │   ├── alu/
-│   │   ├── alu.vhd                       ← Person 2
-│   │   ├── shift_left2.vhd               ← Person 2
-│   │   ├── sign_extender.vhd             ← Person 2
-│   │   ├── mux2to1.vhd                   ← Person 2
-│   │   ├── mux4to1.vhd                   ← Person 2
+│   │   ├── alu.vhd                       ← Person 2 ✅
+│   │   ├── shift_left2.vhd               ← Person 2 ✅
+│   │   ├── sign_extender.vhd             ← Person 2 ✅
+│   │   ├── mux2to1.vhd                   ← Person 2 ✅
+│   │   ├── mux4to1.vhd                   ← Person 2 ✅
 │   │
 │   ├── control/
-│   │   ├── control_unit.vhd              ← Person 3
-│   │   ├── alu_control.vhd               ← Person 3
-│   │   ├── fsm_controller.vhd            ← Person 3
+│   │   ├── control_unit.vhd              ← Person 3 ✅
+│   │   ├── alu_control.vhd               ← Person 3 ✅
+│   │   ├── fsm_controller.vhd            ← Person 3 ✅
 │   │
 │   ├── top/
 │   │   ├── datapath.vhd                  ← Person 4
@@ -67,8 +67,8 @@ MultiCycleMIPS/
 │
 ├── tb/                     # Testbenches
 │   ├── tb_instruction_memory.vhd         ← Person 1
-│   ├── tb_alu.vhd                        ← Person 2
-│   ├── tb_control_unit.vhd               ← Person 3
+│   ├── tb_alu.vhd                        ← Person 2 ✅
+│   ├── tb_control_unit.vhd               ← Person 3 ✅
 │   ├── tb_top_level.vhd                  ← Person 4
 │
 ├── sim/                    # Simulation scripts
@@ -77,7 +77,7 @@ MultiCycleMIPS/
 │
 ├── docs/                   # Documentation
 │   ├── architecture_diagram.pdf          ← Team
-│   ├── README.md                         ← Maintained by Person 4
+│   ├── README.md                         ← Maintained by Person 2 ✅
 │   ├── Project_Report.pdf                ← Final report
 │
 └── .gitignore
