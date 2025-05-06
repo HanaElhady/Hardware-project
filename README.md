@@ -42,11 +42,11 @@ MultiCycleMIPS/
 │   │   ├── memory_data_register.vhd      ← Person 1
 │   │
 │   ├── register_file/
-│   │   ├── register_file.vhd             ← Person 1
-│   │   ├── A_register.vhd                ← Person 1
-│   │   ├── B_register.vhd                ← Person 1
+│   │   ├── register_file.vhd             ← Person 1 ✅
+│   │   ├── A_register.vhd                ← Person 1 ✅
+│   │   ├── B_register.vhd                ← Person 1 ✅
 │   │   ├── alu_out_register.vhd          ← Person 1
-│   │   ├── pc.vhd                        ← Person 1
+│   │   ├── pc.vhd                        ← Person 1 ✅
 │   │
 │   ├── alu/
 │   │   ├── alu.vhd                       ← Person 2 ✅
