@@ -1,0 +1,13 @@
+186
+~E 1 "./src/InstructionMemory_TB.vhd" 5 instructionmemory_tb
+~A 1 "./src/InstructionMemory_TB.vhd" 8 test
+~E 1 "./src/DataMemory_TB.vhd" 5 datamemory_tb
+~A 1 "./src/DataMemory_TB.vhd" 8 behavior
+~E 1 "./src/DataMemory.vhd" 5 datamemory
+~A 1 "./src/DataMemory.vhd" 15 behavior
+~E 1 "./src/InstructionMemory.vhd" 5 instructionmemory
+~A 1 "./src/InstructionMemory.vhd" 12 behavior
+~E 1 "./src/MemoryDataRegister.vhd" 5 memorydataregister
+~A 1 "./src/MemoryDataRegister.vhd" 15 behavioral
+~E 1 "./src/MemoryDataRegister_TB.vhd" 5 memorydataregister_tb
+~A 1 "./src/MemoryDataRegister_TB.vhd" 8 behavior
