@@ -37,47 +37,47 @@ MultiCycleMIPS/
 │
 ├── src/                    # VHDL source files
 │   ├── memory/
-│   │   ├── instruction_memory.vhd        ← Person 1
-│   │   ├── data_memory.vhd               ← Person 1
-│   │   ├── memory_data_register.vhd      ← Person 1
+│   │   ├── instruction_memory.vhd        ← Person 1 ✅
+│   │   ├── data_memory.vhd               ← Person 1 ✅
+│   │   ├── memory_data_register.vhd      ← Person 1 ✅
 │   │
 │   ├── register_file/
-│   │   ├── register_file.vhd             ← Person 1 ✅
-│   │   ├── A_register.vhd                ← Person 1 ✅
-│   │   ├── B_register.vhd                ← Person 1 ✅
-│   │   ├── alu_out_register.vhd          ← Person 1
-│   │   ├── pc.vhd                        ← Person 1 ✅
+│   │   ├── register_file.vhd             ← Person 2 ✅
+│   │   ├── A_register.vhd                ← Person 2 ✅
+│   │   ├── B_register.vhd                ← Person 2 ✅
+│   │   ├── alu_out_register.vhd          ← Person 2 ✅
+│   │   ├── pc.vhd                        ← Person 2 ✅
 │   │
 │   ├── alu/
-│   │   ├── alu.vhd                       ← Person 2 ✅
-│   │   ├── shift_left2.vhd               ← Person 2 ✅
-│   │   ├── sign_extender.vhd             ← Person 2 ✅
-│   │   ├── mux2to1.vhd                   ← Person 2 ✅
-│   │   ├── mux4to1.vhd                   ← Person 2 ✅
+│   │   ├── alu.vhd                       ← Person 3 ✅
+│   │   ├── shift_left2.vhd               ← Person 3 ✅
+│   │   ├── sign_extender.vhd             ← Person 3 ✅
+│   │   ├── mux2to1.vhd                   ← Person 3 ✅
+│   │   ├── mux4to1.vhd                   ← Person 3 ✅
 │   │
 │   ├── control/
-│   │   ├── control_unit.vhd              ← Person 3 ✅
-│   │   ├── alu_control.vhd               ← Person 3 ✅
-│   │   ├── fsm_controller.vhd            ← Person 3 ✅
+│   │   ├── control_unit.vhd              ← Person 4 ✅
+│   │   ├── alu_control.vhd               ← Person 4 ✅
+│   │   ├── fsm_controller.vhd            ← Person 4 ✅
 │   │
 │   ├── top/
-│   │   ├── datapath.vhd                  ← Person 4
-│   │   ├── top_level.vhd                 ← Person 4
-│   │   ├── connection_logic.vhd          ← Person 4
+│   │   ├── datapath.vhd                  ← Person 5
+│   │   ├── top_level.vhd                 ← Person 5
+│   │   ├── connection_logic.vhd          ← Person 5
 │
 ├── tb/                     # Testbenches
-│   ├── tb_instruction_memory.vhd         ← Person 1
-│   ├── tb_alu.vhd                        ← Person 2 ✅
-│   ├── tb_control_unit.vhd               ← Person 3 ✅
-│   ├── tb_top_level.vhd                  ← Person 4
+│   ├── tb_instruction_memory.vhd         ← Person 1/2 ✅
+│   ├── tb_alu.vhd                        ← Person 3   ✅
+│   ├── tb_control_unit.vhd               ← Person 4   ✅
+│   ├── tb_top_level.vhd                  ← Person 5
 │
 ├── sim/                    # Simulation scripts
-│   ├── waveform.do                       ← Person 4 (optional)
-│   ├── run_simulation.tcl                ← Person 4
+│   ├── waveform.do                       ← Person 5 (optional)
+│   ├── run_simulation.tcl                ← Person 5
 │
 ├── docs/                   # Documentation
 │   ├── architecture_diagram.pdf          ← Team
-│   ├── README.md                         ← Maintained by Person 2 ✅
+│   ├── README.md                         ← Maintained by Person 3 ✅
 │   ├── Project_Report.pdf                ← Final report
 │
 └── .gitignore
