@@ -1,0 +1,6 @@
+.\src\InstructionMemory.vhd
+.\src\InstructionMemory_TB.vhd
+.\src\DataMemory.vhd
+.\src\DataMemory_TB.vhd
+.\src\MemoryDataRegister.vhd
+.\src\MemoryDataRegister_TB.vhd

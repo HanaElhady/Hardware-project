@@ -1,0 +1,5 @@
+MESSAGE "File: c:\VHDL\Design2\Design0\src\InstructionMemory.vhd" 
+MESSAGE "Compile Entity "InstructionMemory"" 
+MESSAGE "Entity `InstructionMemory' has been skipped - no difference detected." 
+MESSAGE "Compile Architecture "behavior" of Entity "InstructionMemory"" 
+SUCCESS "Compile success 0 Errors 0 Warnings  Analysis time :  0.0 [s]" 

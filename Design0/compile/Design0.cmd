@@ -1,0 +1,1 @@
+-w -s "c:\VHDL\Design2\library.cfg"  -j "c:\VHDL\Design2\Design0\projlib.cfg"  -d "c:\VHDL\Design2\Design0\compile\"  -work Design0 -dbg -e 100 "c:\VHDL\Design2\Design0\src\InstructionMemory.vhd" 
