@@ -891,6 +891,204 @@ That’s a good question. The short answer is:
 
 ---
 
+### 🧠 General Multi-Cycle Phases
 
+Each instruction executes in **steps (clock cycles)**:
+
+1. **Instruction Fetch (IF)**
+2. **Instruction Decode / Register Fetch (ID)**
+3. **Execution / Effective Address Calculation (EX)**
+4. **Memory Access (MEM)**
+5. **Write Back (WB)**
+
+---
+
+## 🟦 **R-type Instructions** (e.g., `add $t1, $t2, $t3`)
+
+### ✅ Goal:
+
+`t1 = t2 + t3` using the register file and ALU.
+
+### 🧭 Phases:
+
+**1. IF (Instruction Fetch)**
+
+* ① `PC` → `Address`
+* ② `Memory` reads instruction
+* ③ `IRWrite` enables writing to **Instruction Register**
+
+**2. ID (Decode)**
+
+* ④ Instruction `[25:21]` and `[20:16]` used to read `t2`, `t3` from `Register File`
+* ⑤ Data stored into registers **A** and **B**
+
+**3. EX (Execute)**
+
+* ⑥ `ALUSrcA` = 1 → send A to ALU
+* ⑦ `ALUSrcB` = 00 → send B to ALU
+* ⑧ `ALUOp` = R-type, decoded by `ALUControl`
+* ⑨ `ALU` performs `A + B`
+* 🔟 Result goes to **ALUOut Register**
+
+**4. WB (Write Back)**
+
+* ⑪ `RegDst` = 1 (select `[15:11]` = destination reg)
+* ⑫ `MemtoReg` = 0 (select ALU result)
+* ⑬ `RegWrite` = 1 → write to `t1`
+
+---
+
+## 🟨 **LW Instruction** (`lw $t0, 4($t1)`)
+
+### ✅ Goal:
+
+`t0 = Mem[$t1 + 4]`
+
+### 🧭 Phases:
+
+**1. IF**
+
+* ① Fetch instruction from memory
+
+**2. ID**
+
+* ② Read `t1` from register file → A
+* ③ Sign-extend `4` → 32-bit
+* ④ Prepare for address calc
+
+**3. EX**
+
+* ⑤ ALU = A + sign-extended offset
+* ⑥ Result goes to ALUOut
+
+**4. MEM**
+
+* ⑦ Address = ALUOut
+* ⑧ `MemRead = 1`
+* ⑨ Memory data → MDR (Memory Data Register)
+
+**5. WB**
+
+* ⑩ `RegDst = 0` → use `[20:16]` (t0)
+* ⑪ `MemtoReg = 1`
+* ⑫ `RegWrite = 1` → write MDR to t0
+
+---
+
+## 🟥 **SW Instruction** (`sw $t0, 4($t1)`)
+
+### ✅ Goal:
+
+`Mem[$t1 + 4] = $t0`
+
+### 🧭 Phases:
+
+**Same as LW up to EX stage.**
+
+**4. MEM**
+
+* ① ALUOut = address
+* ② B (from t0) goes to **Memory Write Data**
+* ③ `MemWrite = 1` → perform store
+
+*No WB stage for SW*
+
+---
+
+## 🟩 **BEQ Instruction** (`beq $t1, $t2, LABEL`)
+
+### ✅ Goal:
+
+If `t1 == t2`, PC = PC + 4 + (offset << 2)
+
+### 🧭 Phases:
+
+**1. IF & 2. ID**
+
+* ① Read `t1` and `t2` into A and B
+
+**3. EX**
+
+* ② ALU = A - B
+* ③ If result is zero → branch taken
+* ④ Sign-extend `offset` then shift left 2
+* ⑤ Add to PC+4 using ALU
+
+**4. MEM**
+
+* PC updated if:
+
+  * `Zero = 1`
+  * `PCWriteCond = 1`
+  * `PCSource = 01`
+
+---
+
+## 🟧 **JUMP Instruction** (`j LABEL`)
+
+### ✅ Goal:
+
+Jump to LABEL (address)
+
+**Phases:**
+
+* PCSource = 10
+* Jump address = `{PC[31:28], instr[25:0], 00}`
+* New PC = jump address
+
+---
+
+## ✳️ Color-Coded Highlights from Diagram
+
+* **Orange lines** = control signals from the Control Unit (e.g., `RegDst`, `ALUSrcA`, `MemWrite`, etc.)
+* **Thick black lines** = data paths
+* **Thin black lines** = connections between modules
+
+---
+
+
+### ✅ **Control Signal Summary Table**
+
+| **Instruction**                 | **Cycle** | `RegDst` | `RegWrite` | `ALUSrcA` | `ALUSrcB` | `ALUOp` | `MemRead` | `MemWrite` | `MemtoReg` | `IRWrite` | `PCWrite` | `PCWriteCond` | `PCSource` |
+| ------------------------------- | --------- | -------- | ---------- | --------- | --------- | ------- | --------- | ---------- | ---------- | --------- | --------- | ------------- | ---------- |
+| **R-type** (`add`, `sub`, etc.) | IF        | X        | 0          | 0         | 01        | 00      | 1         | 0          | X          | 1         | 1         | 0             | 00         |
+|                                 | ID        | X        | 0          | 1         | 11        | 00      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | EX        | X        | 0          | 1         | 00        | 10      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | WB        | 1        | 1          | X         | X         | X       | 0         | 0          | 0          | 0         | 0         | 0             | X          |
+| **LW**                          | IF        | X        | 0          | 0         | 01        | 00      | 1         | 0          | X          | 1         | 1         | 0             | 00         |
+|                                 | ID        | X        | 0          | 1         | 11        | 00      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | EX        | X        | 0          | 1         | 10        | 00      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | MEM       | X        | 0          | X         | X         | X       | 1         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | WB        | 0        | 1          | X         | X         | X       | 0         | 0          | 1          | 0         | 0         | 0             | X          |
+| **SW**                          | IF        | X        | 0          | 0         | 01        | 00      | 1         | 0          | X          | 1         | 1         | 0             | 00         |
+|                                 | ID        | X        | 0          | 1         | 11        | 00      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | EX        | X        | 0          | 1         | 10        | 00      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | MEM       | X        | 0          | X         | X         | X       | 0         | 1          | X          | 0         | 0         | 0             | X          |
+| **BEQ**                         | IF        | X        | 0          | 0         | 01        | 00      | 1         | 0          | X          | 1         | 1         | 0             | 00         |
+|                                 | ID        | X        | 0          | 1         | 00        | 01      | 0         | 0          | X          | 0         | 0         | 0             | X          |
+|                                 | EX        | X        | 0          | 1         | 00        | 01      | 0         | 0          | X          | 0         | 0         | 1             | 01         |
+| **JUMP**                        | IF        | X        | 0          | 0         | 01        | 00      | 1         | 0          | X          | 1         | 1         | 0             | 00         |
+|                                 | JUMP      | X        | 0          | X         | X         | X       | 0         | 0          | X          | 0         | 1         | 0             | 10         |
+
+---
+
+### 🧩 Signal Meaning Cheat Sheet
+
+| Signal        | Meaning                                               |
+| ------------- | ----------------------------------------------------- |
+| `RegDst`      | 1: write to `rd`, 0: write to `rt`                    |
+| `RegWrite`    | Enable register file write                            |
+| `ALUSrcA`     | 0: PC, 1: register A                                  |
+| `ALUSrcB`     | 00: B, 01: 4, 10: sign-extended imm, 11: shift-left 2 |
+| `ALUOp`       | 00: add, 01: subtract, 10: R-type func field          |
+| `MemRead`     | Enable memory read                                    |
+| `MemWrite`    | Enable memory write                                   |
+| `MemtoReg`    | 1: write memory data to reg, 0: write ALU result      |
+| `IRWrite`     | Write instruction register                            |
+| `PCWrite`     | Write new PC directly                                 |
+| `PCWriteCond` | Write PC conditionally (e.g., BEQ)                    |
+| `PCSource`    | 00: ALU result, 01: branch, 10: jump                  |
+
+---
 
 
