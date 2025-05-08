@@ -4,34 +4,35 @@ use ieee.numeric_std.all;
 
 entity Alu is 
     port (
-        rs, rd       : in signed(31 downto 0);	
-        ALUControl   : in std_logic_vector(3 downto 0);
-        ALUResult    : out signed(31 downto 0);
+        rs, rd       : in  std_logic_vector(31 downto 0);
+        ALUControl   : in  std_logic_vector(3 downto 0);
+        ALUResult    : out std_logic_vector(31 downto 0);
         zero         : out std_logic
     );		
 end entity;
 
 architecture sims of Alu is
 begin 		
-    process(rs, rd, ALUControl)	 
-	VARIABLE result : signed(31 downto 0);  
+    process(rs, rd, ALUControl)
+        variable result : signed(31 downto 0);
     begin
         case ALUControl is
             when "0000" =>  -- AND
-                result := rs and rd;
+                result := signed(rs) and signed(rd);
 
             when "0001" =>  -- OR
-                result := rs or rd;
+                result := signed(rs) or signed(rd);
 
             when "0010" =>  -- ADD
-                result := rs + rd;
+                result := signed(rs) + signed(rd);
 
             when "0110" =>  -- SUB
-                result := rs - rd;
+                result := signed(rs) - signed(rd);
 
             when "0111" =>  -- SLT
-                if rs < rd then
-                    result := (31 downto 1 => '0') & '1';
+                if signed(rs) < signed(rd) then
+                    result := (others => '0');
+                    result(0) := '1';  -- Set LSB
                 else
                     result := (others => '0');
                 end if;
@@ -41,17 +42,14 @@ begin
         end case;
 
         -- Set zero flag
-        if result = x"00000000" then
+        if result = 0 then
             zero <= '1';
         else
             zero <= '0';
         end if;
-		
-		ALUResult <= result;
+
+        ALUResult <= std_logic_vector(result);
     end process;
-
-
 end architecture;
-
 
 	
