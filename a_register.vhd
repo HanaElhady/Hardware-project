@@ -1,6 +1,5 @@
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;   
-use ieee.numeric_std.all;
+use IEEE.STD_LOGIC_1164.ALL;
 
 entity A_Register is
     Port (
@@ -22,3 +21,4 @@ begin
 
     A_out <= temp;
 end Behavioral;
+
