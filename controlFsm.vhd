@@ -1,4 +1,4 @@
-library ieee;
+										 library ieee;
 use ieee.std_logic_1164.all;  
 
 entity ControlFSM is  
@@ -127,10 +127,7 @@ begin
             ALUSrcA   <= '0';
 			ALUSrcB   <= "11";
 			ALUOp     <= "00";
-			
-		
-			
-			
+					
 			when memaddr =>
 			ALUSrcB <= "10";
 		    ALUSrcA <= '1';
@@ -185,6 +182,6 @@ begin
             null;
 			
 		end case;	
-	end process;		
+	end process;			   
 	
-end architecture;
+end architecture; 
