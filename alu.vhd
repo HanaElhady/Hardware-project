@@ -51,3 +51,4 @@ begin
         ALUResult <= std_logic_vector(result);
     end process;
 end architecture;
+
